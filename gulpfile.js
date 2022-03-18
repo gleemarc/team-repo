@@ -134,15 +134,17 @@ const reload = browserSync.reload;
 function browser(done) {
     browserSync.init({
         server: {
-            baseDir: "./dist",   //根目錄
+            baseDir: "./dist",
             index: "index.html"
         },
         port: 3000
     });
-    watch(['src/*.html','src/layout/*.html'], includeHTML).on('change', reload);
-    watch(['src/sass/*.scss', 'src/sass/**/*.scss'], sassStyle).on('change', reload);
-    watch('src/js/*.js', minijs).on('change', reload);
-
+    watch(['src/*.html' , 'src/layout/*.html' ,] , includeHTML).on('change' , reload);
+    watch(['src/sass/*.scss' , 'src/sass/**/*.scss'] , sassStyle).on('change' , reload);
+     watch(['src/js/*.js' , 'src/js/**/*.js'] , minijs).on('change' , reload);
+     watch(['src/img/*.*' ,  'src/img/**/*.*'] , package).on('change' , reload);
     done();
 }
-exports.default = browser     //.default即為預設，只要終端機打gulp就執行
+exports.default = series(parallel(includeHTML , sassStyle, minijs ,package),browser)    
+
+//.default即為預設，只要終端機打gulp就執行
